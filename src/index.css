@@ -9,9 +9,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(to bottom, rgba(43, 59, 85, 0.9), rgba(15, 23, 42, 1)), url("../public/backgroundimg.jpg");
+  background-blend-mode: luminosity;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #0F172A;
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1 {
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
 }
