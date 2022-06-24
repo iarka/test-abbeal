@@ -12,6 +12,7 @@ import FilmCard from "./components/FilmCard";
 
 function App() {
     const [popularMovieList, setPopularMovieList] = useState([])
+    const [movieList, setMovieList] = useState([])
     const [topRatedMovieList, setTopRatedMovieList] = useState([])
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(1);
@@ -22,6 +23,7 @@ function App() {
             // 4. Setting *dogImage* to the image url that we received from the response above
             .then(data => {
                 setPopularMovieList(data.results)
+                setMovieList(data.results)
                 setPageCount(data.total_pages)
             })
     },[page])
@@ -38,6 +40,18 @@ function App() {
     const handlePageClick = (event) => {
         setPage(event.selected + 1)
     };
+
+    const handleChange = (event) => {
+        if (event.target.value === "all") {
+            setPopularMovieList(movieList)
+        } else {
+            const filter = movieList.filter(obj => {
+                return obj.genre_ids.includes(parseInt(event.target.value))
+            })
+            setPopularMovieList(filter)
+        }
+
+    }
 
   return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -90,6 +104,27 @@ function App() {
 
           <div>
               <h1 className="mb-10">Tous les films</h1>
+
+              <div className="mb-5">
+                  <label htmlFor="location" className="text-sm font-medium text-white">
+                      Filtrer par :
+                  </label>
+
+                  <select
+                      onChange={handleChange}
+                      id="genre"
+                      name="genre"
+                      className="ml-2 mt-1 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                      defaultValue=""
+                  >
+                      <option value="">Genre</option>
+                      <option value="all">Tous</option>
+                      <option value="28">Action</option>
+                      <option value="27">Horreur</option>
+                      <option value="10749">Amour</option>
+                  </select>
+              </div>
+
               <AllFilms films={popularMovieList}></AllFilms>
               <div className="sm:flex-1 sm:flex sm:items-center sm:justify-center mt-5 mb-10">
                   <ReactPaginate
