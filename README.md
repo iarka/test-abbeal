@@ -2,7 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Utilisation de Tailwind
+Utilisation de Tailwind (framework css) pour intégrer rapidement la maquette
+
+Test technique, répertoire de films à l'aide de l'API TMDB
+TOP 10 films (carousel slider)
+Tous le films (20 films par page -> pagination)
 
 ## Commandes
 
