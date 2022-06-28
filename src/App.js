@@ -1,57 +1,50 @@
-import './App.css';
-import {useEffect, useState} from "react";
-import AllFilms from "./components/AllFilms";
-import ReactPaginate from "react-paginate";
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import AllFilms from './components/AllFilms'
+import ReactPaginate from 'react-paginate'
 import { SearchIcon } from '@heroicons/react/solid'
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import FilmCard from "./components/FilmCard";
+import Carousel from './components/Carousel'
+import axios from 'axios'
 
-function App() {
-    const [popularMovieList, setPopularMovieList] = useState([])
-    const [movieList, setMovieList] = useState([])
-    const [topRatedMovieList, setTopRatedMovieList] = useState([])
-    const [pageCount, setPageCount] = useState(0);
-    const [page, setPage] = useState(1);
+function App () {
+  const [popularMovieList, setPopularMovieList] = useState([])
+  const [movieList, setMovieList] = useState([])
+  const [topRatedMovieList, setTopRatedMovieList] = useState([])
+  const [page, setPage] = useState(1)
 
-    useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=${page}`)
-            .then(response => response.json())
-            // 4. Setting *dogImage* to the image url that we received from the response above
-            .then(data => {
-                setPopularMovieList(data.results)
-                setMovieList(data.results)
-                setPageCount(data.total_pages)
-            })
-    },[page])
+  useEffect(() => {
+    axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=${page}`)
+      .then(response => {
+        setPopularMovieList(response.data.results)
+        setMovieList(response.data.results)
+      }, error => {
+        console.log(error)
+      })
+  }, [page])
 
-    useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=1`)
-            .then(response => response.json())
-            // 4. Setting *dogImage* to the image url that we received from the response above
-            .then(data => {
-                setTopRatedMovieList(data.results)
-            })
-    },[])
+  useEffect(() => {
+    axios.get('https://api.themoviedb.org/3/movie/top_rated?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=1')
+      .then(response => {
+        setTopRatedMovieList(response.data.results)
+      }, error => {
+        console.log(error)
+      })
+  }, [])
 
-    const handlePageClick = (event) => {
-        setPage(event.selected + 1)
-    };
+  const handlePageClick = (event) => {
+    setPage(event.selected + 1)
+  }
 
-    const handleChange = (event) => {
-        if (event.target.value === "all") {
-            setPopularMovieList(movieList)
-        } else {
-            const filter = movieList.filter(obj => {
-                return obj.genre_ids.includes(parseInt(event.target.value))
-            })
-            setPopularMovieList(filter)
-        }
-
+  const handleChange = (event) => {
+    if (event.target.value === 'all') {
+      setPopularMovieList(movieList)
+    } else {
+      const filter = movieList.filter(obj => {
+        return obj.genre_ids.includes(parseInt(event.target.value))
+      })
+      setPopularMovieList(filter)
     }
+  }
 
   return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,23 +74,7 @@ function App() {
 
           <div>
               <h1 className="mb-10">Les 10 meilleurs films</h1>
-              <Swiper
-                  slidesPerView={3}
-                  spaceBetween={30}
-                  slidesPerGroup={3}
-                  loop={true}
-                  loopFillGroupWithBlank={true}
-                  pagination={{
-                      clickable: true,
-                  }}
-                  navigation={true}
-                  modules={[Pagination, Navigation]}
-                  className="mySwiper mb-10"
-              >
-                  {topRatedMovieList.map((film) =>
-                      <SwiperSlide className="flex justify-center"><FilmCard film={film}></FilmCard></SwiperSlide>
-                  )}
-              </Swiper>
+              <Carousel topRatedMovieList={topRatedMovieList}/>
           </div>
 
           <hr className="solid opacity-20 mb-20"></hr>
@@ -146,13 +123,7 @@ function App() {
           </div>
 
       </div>
-
-    /*<div className="App">
-      <header className="App-header">
-
-      </header>
-    </div>*/
-  );
+  )
 }
 
-export default App;
+export default App
