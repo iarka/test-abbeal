@@ -27,7 +27,7 @@ function Carousel (props) {
         className="mySwiper mb-10"
     >
         {topRatedMovieList.map((film) =>
-            <SwiperSlide key={film.id} className="flex justify-center">
+            <SwiperSlide key={film.id + 'swiper'} className="flex justify-center">
                 <FilmCard film={film} key={film.id} />
             </SwiperSlide>
         )}

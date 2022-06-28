@@ -1,7 +1,7 @@
 import React from 'react'
 import * as PropTypes from 'prop-types'
 
-FilmCard.propTypes = { film: PropTypes.arrayOf(PropTypes.any) }
+FilmCard.propTypes = { film: PropTypes.object }
 
 function FilmCard (props) {
   const { film } = props
