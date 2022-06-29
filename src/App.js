@@ -4,7 +4,7 @@ import AllFilms from './components/AllFilms'
 import ReactPaginate from 'react-paginate'
 import { SearchIcon } from '@heroicons/react/solid'
 import Carousel from './components/Carousel'
-import axios from 'axios'
+import { getPopularMovies, getTopRatedMovies } from './services/movies'
 
 function App () {
   const [popularMovieList, setPopularMovieList] = useState([])
@@ -13,22 +13,20 @@ function App () {
   const [page, setPage] = useState(1)
 
   useEffect(() => {
-    axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=${page}`)
-      .then(response => {
-        setPopularMovieList(response.data.results)
-        setMovieList(response.data.results)
-      }, error => {
-        console.log(error)
-      })
+    async function fetchData (page) {
+      const GetPopularMovies = await getPopularMovies(page)
+      setPopularMovieList(GetPopularMovies)
+      setMovieList(GetPopularMovies)
+    }
+    fetchData(page)
   }, [page])
 
   useEffect(() => {
-    axios.get('https://api.themoviedb.org/3/movie/top_rated?api_key=f3fb983d1a3524887a8a8717a10b439b&language=fr-FR&page=1')
-      .then(response => {
-        setTopRatedMovieList(response.data.results)
-      }, error => {
-        console.log(error)
-      })
+    async function fetchData () {
+      const GetTopRatedMovies = await getTopRatedMovies()
+      setTopRatedMovieList(GetTopRatedMovies)
+    }
+    fetchData()
   }, [])
 
   const handlePageClick = (event) => {
